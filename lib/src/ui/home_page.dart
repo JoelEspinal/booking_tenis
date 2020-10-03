@@ -5,7 +5,39 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TENIS'),
+        title: Text('RESERVAS'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          showGeneralDialog(
+              context: context,
+              barrierDismissible: true,
+              barrierLabel:
+                  MaterialLocalizations.of(context).modalBarrierDismissLabel,
+              barrierColor: Colors.black45,
+              transitionDuration: const Duration(milliseconds: 250),
+              pageBuilder: (BuildContext buildContext, Animation animation,
+                  Animation secondaryAnimation) {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text('RESERVAR'),
+                    leading: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    actions: [
+                      IconButton(
+                        icon: Icon(Icons.check),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                );
+              });
+        },
+        label: Text('Reservar'),
+        icon: Icon(Icons.add),
       ),
       body: SafeArea(
         child: ListView(
