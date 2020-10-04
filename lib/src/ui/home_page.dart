@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../data/daos/reservation_dao.dart';
 import '../data/moor_database.dart';
+import 'widgets/reservation_form.dart';
 import 'widgets/reservation_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,17 +19,8 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('RESERVAS'),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          await dao.addReservation(
-            ReservationData(
-              court: 'A',
-              form: DateTime(1, 2020, 1),
-              to: DateTime(1, 2020, 2),
-              reservationOwner: 'Manuel Peres',
-            ),
-          );
+        onPressed: () {
           showGeneralDialog(
               context: context,
               barrierDismissible: true,
@@ -38,21 +30,7 @@ class _HomePageState extends State<HomePage> {
               transitionDuration: const Duration(milliseconds: 250),
               pageBuilder: (BuildContext buildContext, Animation animation,
                   Animation secondaryAnimation) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: Text('RESERVAR'),
-                    leading: IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    actions: [
-                      IconButton(
-                        icon: Icon(Icons.check),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                );
+                return ReservationForm();
               });
         },
         label: Text('Reservar'),

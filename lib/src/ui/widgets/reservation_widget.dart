@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
+import '../../common/constants.dart';
 import '../../data/daos/reservation_dao.dart';
 import '../../data/moor_database.dart';
 
@@ -14,17 +16,26 @@ class ReservationWidget extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 8.0),
       child: ListTile(
-        title: Text('Manuel Santana'),
+        title: Text(
+          reservation.reservationOwner,
+          style: TextStyle(fontSize: 24),
+        ),
         subtitle: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('9:00 PM'),
+              child: Text(
+                DateFormat(Constants.DATE_TIME_FORMAT).format(reservation.form),
+                style: TextStyle(fontSize: 20),
+              ),
             ),
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('10/09/2020'),
+              child: Text(
+                DateFormat(Constants.DATE_TIME_FORMAT).format(reservation.form),
+                style: TextStyle(fontSize: 20),
+              ),
             )
           ],
         ),
@@ -36,9 +47,10 @@ class ReservationWidget extends StatelessWidget {
           ),
         ),
         leading: CircleAvatar(
+
           child: Text(
-            'A',
-            style: TextStyle(fontSize: 28),
+            reservation.court,
+            style: TextStyle(fontSize: 32),
           ),
         ),
       ),
