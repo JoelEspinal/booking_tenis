@@ -20,7 +20,7 @@ class ReservationDao extends DatabaseAccessor<AppDatabase>
     return into($ReservationTable(db)).insert(_entry);
   }
 
-  Stream<List<ReservationData>> watchAllTasks() {
+  Stream<List<ReservationData>> watchAllReservations() {
     return (select(reservation)
           ..orderBy([
             (r) => OrderingTerm(expression: r.form, mode: OrderingMode.desc),

@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SafeArea(
         child: StreamBuilder(
-          stream: dao.watchAllTasks(),
+          stream: dao.watchAllReservations(),
           builder: (context, AsyncSnapshot<List<ReservationData>> snapshot) {
             final reservations = snapshot.data ?? List();
 
