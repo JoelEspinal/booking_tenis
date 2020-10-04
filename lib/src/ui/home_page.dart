@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
               court: 'A',
               form: DateTime(1, 2020, 1),
               to: DateTime(1, 2020, 2),
+              reservationOwner: 'Manuel Peres',
             ),
           );
           showGeneralDialog(

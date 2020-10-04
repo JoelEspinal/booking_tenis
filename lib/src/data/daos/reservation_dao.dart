@@ -17,7 +17,8 @@ class ReservationDao extends DatabaseAccessor<AppDatabase>
       final _entry = ReservationCompanion(
           court: Value(reservation.court),
           form: Value(reservation.form),
-          to: Value(reservation.to));
+          to: Value(reservation.to),
+          reservationOwner: Value(reservation.reservationOwner));
 
       return into($ReservationTable(db)).insert(_entry);
     } else {

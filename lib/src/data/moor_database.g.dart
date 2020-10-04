@@ -10,10 +10,15 @@ part of 'moor_database.dart';
 class ReservationData extends DataClass implements Insertable<ReservationData> {
   final int id;
   final String court;
+  final String reservationOwner;
   final DateTime form;
   final DateTime to;
   ReservationData(
-      {this.id, @required this.court, @required this.form, @required this.to});
+      {this.id,
+      @required this.court,
+      @required this.reservationOwner,
+      @required this.form,
+      @required this.to});
   factory ReservationData.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
@@ -25,6 +30,8 @@ class ReservationData extends DataClass implements Insertable<ReservationData> {
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       court:
           stringType.mapFromDatabaseResponse(data['${effectivePrefix}court']),
+      reservationOwner: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}reservation_owner']),
       form:
           dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}form']),
       to: dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}to']),
@@ -38,6 +45,9 @@ class ReservationData extends DataClass implements Insertable<ReservationData> {
     }
     if (!nullToAbsent || court != null) {
       map['court'] = Variable<String>(court);
+    }
+    if (!nullToAbsent || reservationOwner != null) {
+      map['reservation_owner'] = Variable<String>(reservationOwner);
     }
     if (!nullToAbsent || form != null) {
       map['form'] = Variable<DateTime>(form);
@@ -53,6 +63,9 @@ class ReservationData extends DataClass implements Insertable<ReservationData> {
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       court:
           court == null && nullToAbsent ? const Value.absent() : Value(court),
+      reservationOwner: reservationOwner == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reservationOwner),
       form: form == null && nullToAbsent ? const Value.absent() : Value(form),
       to: to == null && nullToAbsent ? const Value.absent() : Value(to),
     );
@@ -64,6 +77,7 @@ class ReservationData extends DataClass implements Insertable<ReservationData> {
     return ReservationData(
       id: serializer.fromJson<int>(json['id']),
       court: serializer.fromJson<String>(json['court']),
+      reservationOwner: serializer.fromJson<String>(json['reservationOwner']),
       form: serializer.fromJson<DateTime>(json['form']),
       to: serializer.fromJson<DateTime>(json['to']),
     );
@@ -74,16 +88,22 @@ class ReservationData extends DataClass implements Insertable<ReservationData> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'court': serializer.toJson<String>(court),
+      'reservationOwner': serializer.toJson<String>(reservationOwner),
       'form': serializer.toJson<DateTime>(form),
       'to': serializer.toJson<DateTime>(to),
     };
   }
 
   ReservationData copyWith(
-          {int id, String court, DateTime form, DateTime to}) =>
+          {int id,
+          String court,
+          String reservationOwner,
+          DateTime form,
+          DateTime to}) =>
       ReservationData(
         id: id ?? this.id,
         court: court ?? this.court,
+        reservationOwner: reservationOwner ?? this.reservationOwner,
         form: form ?? this.form,
         to: to ?? this.to,
       );
@@ -92,6 +112,7 @@ class ReservationData extends DataClass implements Insertable<ReservationData> {
     return (StringBuffer('ReservationData(')
           ..write('id: $id, ')
           ..write('court: $court, ')
+          ..write('reservationOwner: $reservationOwner, ')
           ..write('form: $form, ')
           ..write('to: $to')
           ..write(')'))
@@ -100,13 +121,18 @@ class ReservationData extends DataClass implements Insertable<ReservationData> {
 
   @override
   int get hashCode => $mrjf($mrjc(
-      id.hashCode, $mrjc(court.hashCode, $mrjc(form.hashCode, to.hashCode))));
+      id.hashCode,
+      $mrjc(
+          court.hashCode,
+          $mrjc(
+              reservationOwner.hashCode, $mrjc(form.hashCode, to.hashCode)))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
       (other is ReservationData &&
           other.id == this.id &&
           other.court == this.court &&
+          other.reservationOwner == this.reservationOwner &&
           other.form == this.form &&
           other.to == this.to);
 }
@@ -114,31 +140,37 @@ class ReservationData extends DataClass implements Insertable<ReservationData> {
 class ReservationCompanion extends UpdateCompanion<ReservationData> {
   final Value<int> id;
   final Value<String> court;
+  final Value<String> reservationOwner;
   final Value<DateTime> form;
   final Value<DateTime> to;
   const ReservationCompanion({
     this.id = const Value.absent(),
     this.court = const Value.absent(),
+    this.reservationOwner = const Value.absent(),
     this.form = const Value.absent(),
     this.to = const Value.absent(),
   });
   ReservationCompanion.insert({
     this.id = const Value.absent(),
     @required String court,
+    @required String reservationOwner,
     @required DateTime form,
     @required DateTime to,
   })  : court = Value(court),
+        reservationOwner = Value(reservationOwner),
         form = Value(form),
         to = Value(to);
   static Insertable<ReservationData> custom({
     Expression<int> id,
     Expression<String> court,
+    Expression<String> reservationOwner,
     Expression<DateTime> form,
     Expression<DateTime> to,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (court != null) 'court': court,
+      if (reservationOwner != null) 'reservation_owner': reservationOwner,
       if (form != null) 'form': form,
       if (to != null) 'to': to,
     });
@@ -147,11 +179,13 @@ class ReservationCompanion extends UpdateCompanion<ReservationData> {
   ReservationCompanion copyWith(
       {Value<int> id,
       Value<String> court,
+      Value<String> reservationOwner,
       Value<DateTime> form,
       Value<DateTime> to}) {
     return ReservationCompanion(
       id: id ?? this.id,
       court: court ?? this.court,
+      reservationOwner: reservationOwner ?? this.reservationOwner,
       form: form ?? this.form,
       to: to ?? this.to,
     );
@@ -165,6 +199,9 @@ class ReservationCompanion extends UpdateCompanion<ReservationData> {
     }
     if (court.present) {
       map['court'] = Variable<String>(court.value);
+    }
+    if (reservationOwner.present) {
+      map['reservation_owner'] = Variable<String>(reservationOwner.value);
     }
     if (form.present) {
       map['form'] = Variable<DateTime>(form.value);
@@ -180,6 +217,7 @@ class ReservationCompanion extends UpdateCompanion<ReservationData> {
     return (StringBuffer('ReservationCompanion(')
           ..write('id: $id, ')
           ..write('court: $court, ')
+          ..write('reservationOwner: $reservationOwner, ')
           ..write('form: $form, ')
           ..write('to: $to')
           ..write(')'))
@@ -213,6 +251,20 @@ class $ReservationTable extends Reservation
     );
   }
 
+  final VerificationMeta _reservationOwnerMeta =
+      const VerificationMeta('reservationOwner');
+  GeneratedTextColumn _reservationOwner;
+  @override
+  GeneratedTextColumn get reservationOwner =>
+      _reservationOwner ??= _constructReservationOwner();
+  GeneratedTextColumn _constructReservationOwner() {
+    return GeneratedTextColumn(
+      'reservation_owner',
+      $tableName,
+      false,
+    );
+  }
+
   final VerificationMeta _formMeta = const VerificationMeta('form');
   GeneratedDateTimeColumn _form;
   @override
@@ -238,7 +290,7 @@ class $ReservationTable extends Reservation
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, court, form, to];
+  List<GeneratedColumn> get $columns => [id, court, reservationOwner, form, to];
   @override
   $ReservationTable get asDslTable => this;
   @override
@@ -258,6 +310,14 @@ class $ReservationTable extends Reservation
           _courtMeta, court.isAcceptableOrUnknown(data['court'], _courtMeta));
     } else if (isInserting) {
       context.missing(_courtMeta);
+    }
+    if (data.containsKey('reservation_owner')) {
+      context.handle(
+          _reservationOwnerMeta,
+          reservationOwner.isAcceptableOrUnknown(
+              data['reservation_owner'], _reservationOwnerMeta));
+    } else if (isInserting) {
+      context.missing(_reservationOwnerMeta);
     }
     if (data.containsKey('form')) {
       context.handle(
