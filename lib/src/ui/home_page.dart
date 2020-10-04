@@ -1,3 +1,4 @@
+import 'package:booking_tenis/src/ui/widgets/reservation_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,6 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('RESERVAS'),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           await dao.addReservation(
@@ -38,21 +38,7 @@ class _HomePageState extends State<HomePage> {
               transitionDuration: const Duration(milliseconds: 250),
               pageBuilder: (BuildContext buildContext, Animation animation,
                   Animation secondaryAnimation) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: Text('RESERVAR'),
-                    leading: IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    actions: [
-                      IconButton(
-                        icon: Icon(Icons.check),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                );
+                return ReservationForm();
               });
         },
         label: Text('Reservar'),
