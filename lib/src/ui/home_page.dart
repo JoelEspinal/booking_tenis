@@ -1,9 +1,9 @@
-import 'package:booking_tenis/src/ui/widgets/reservation_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/daos/reservation_dao.dart';
 import '../data/moor_database.dart';
+import 'widgets/reservation_form.dart';
 import 'widgets/reservation_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,15 +20,7 @@ class _HomePageState extends State<HomePage> {
         title: Text('RESERVAS'),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          await dao.addReservation(
-            ReservationData(
-              court: 'A',
-              form: DateTime(1, 2020, 1),
-              to: DateTime(1, 2020, 2),
-              reservationOwner: 'Manuel Peres',
-            ),
-          );
+        onPressed: () {
           showGeneralDialog(
               context: context,
               barrierDismissible: true,
