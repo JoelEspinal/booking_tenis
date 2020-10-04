@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+import '../data/daos/reservation_dao.dart';
+import '../data/moor_database.dart';
+import 'widgets/reservation_widget.dart';
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final dao = Provider.of<ReservationDao>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('RESERVAS'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
+        onPressed: () async {
+          await dao.addReservation(
+            ReservationData(
+              court: 'A',
+              form: DateTime(1, 2020, 1),
+              to: DateTime(1, 2020, 2),
+            ),
+          );
           showGeneralDialog(
               context: context,
               barrierDismissible: true,
@@ -40,170 +58,19 @@ class HomePage extends StatelessWidget {
         icon: Icon(Icons.add),
       ),
       body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.all(12.0),
-          children: [
-            Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              child: ListTile(
-                title: Text('Manuel Santana'),
-                subtitle: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('9:00 PM'),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('10/09/2020'),
-                    )
-                  ],
-                ),
-                trailing: CircleAvatar(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  child: Text(
-                    '73 %',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-                leading: CircleAvatar(
-                  child: Text(
-                    'A',
-                    style: TextStyle(fontSize: 28),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              child: ListTile(
-                title: Text('Manuel Santana'),
-                subtitle: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('9:00 PM'),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('10/09/2020'),
-                    )
-                  ],
-                ),
-                trailing: CircleAvatar(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  child: Text(
-                    '73 %',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-                leading: CircleAvatar(
-                  child: Text(
-                    'A',
-                    style: TextStyle(fontSize: 28),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              child: ListTile(
-                title: Text('Manuel Santana'),
-                subtitle: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('9:00 PM'),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('10/09/2020'),
-                    )
-                  ],
-                ),
-                trailing: CircleAvatar(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  child: Text(
-                    '73 %',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-                leading: CircleAvatar(
-                  child: Text(
-                    'A',
-                    style: TextStyle(fontSize: 28),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              child: ListTile(
-                title: Text('Manuel Santana'),
-                subtitle: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('9:00 PM'),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('10/09/2020'),
-                    )
-                  ],
-                ),
-                trailing: CircleAvatar(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  child: Text(
-                    '73 %',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-                leading: CircleAvatar(
-                  child: Text(
-                    'A',
-                    style: TextStyle(fontSize: 28),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              child: ListTile(
-                title: Text('Manuel Santana'),
-                subtitle: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('9:00 PM'),
-                    ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('10/09/2020'),
-                    )
-                  ],
-                ),
-                trailing: CircleAvatar(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  child: Text(
-                    '73 %',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-                leading: CircleAvatar(
-                  child: Text(
-                    'A',
-                    style: TextStyle(fontSize: 28),
-                  ),
-                ),
-              ),
-            ),
-          ],
+        child: StreamBuilder(
+          stream: dao.watchAllTasks(),
+          builder: (context, AsyncSnapshot<List<ReservationData>> snapshot) {
+            final reservations = snapshot.data ?? List();
+
+            return ListView.builder(
+              itemCount: reservations.length,
+              itemBuilder: (_, index) {
+                final reservation = reservations[index];
+                return ReservationWidget(reservation, dao);
+              },
+            );
+          },
         ),
       ),
     );
