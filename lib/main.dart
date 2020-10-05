@@ -1,3 +1,4 @@
+import 'package:booking_tenis/src/remote/rain_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ void main() {
         Provider(
           create: (context) => ReservationDao(AppDatabase()),
         ),
+        ChangeNotifierProvider(create: (ctx) => RainService()),
       ],
       child: App(),
     ),
