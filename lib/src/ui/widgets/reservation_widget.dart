@@ -33,7 +33,7 @@ class ReservationWidget extends StatelessWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                DateFormat(Constants.DATE_TIME_FORMAT).format(reservation.form),
+                DateFormat(Constants.DATE_TIME_FORMAT).format(reservation.to),
                 style: TextStyle(fontSize: 20),
               ),
             )
