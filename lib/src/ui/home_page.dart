@@ -1,3 +1,4 @@
+import 'package:booking_tenis/src/ui/widgets/weather_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,12 +43,19 @@ class _HomePageState extends State<HomePage> {
           builder: (context, AsyncSnapshot<List<ReservationData>> snapshot) {
             final reservations = snapshot.data ?? List();
 
-            return ListView.builder(
-              itemCount: reservations.length,
-              itemBuilder: (_, index) {
-                final reservation = reservations[index];
-                return ReservationWidget(reservation, dao);
-              },
+            return Column(
+              children: [
+                WheatherWidget(),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: reservations.length,
+                    itemBuilder: (_, index) {
+                      final reservation = reservations[index];
+                      return ReservationWidget(reservation, dao);
+                    },
+                  ),
+                ),
+              ],
             );
           },
         ),
