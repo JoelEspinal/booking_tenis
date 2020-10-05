@@ -19,6 +19,8 @@ dependencies:
   flutter_form_builder: ^3.14.0
   intl: ^0.16.1
   fluttertoast: ^7.1.1
+  dio: ^3.0.10
+  data_connection_checker: ^0.3.4
 
 dev_dependencies:
   flutter_test:
