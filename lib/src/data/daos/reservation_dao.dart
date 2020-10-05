@@ -43,13 +43,30 @@ class ReservationDao extends DatabaseAccessor<AppDatabase>
 
   Future<bool> isValidInsertion(ReservationData reservation) async {
     final reservations = await getAllRservations();
+
+    int reservationCounter = 1;
+
+    reservations.forEach((r) {
+      if (r.court == reservation.court &&
+          r.form.year == reservation.form.year &&
+          r.form.month == reservation.form.month &&
+          r.form.day == reservation.form.day) {
+        reservationCounter++;
+      }
+    });
+
+    if (reservationCounter > 3) {
+      return Future.value(false);
+    }
+
     var invalidReservation = reservations
         .where((r) =>
             r.court == reservation.court &&
-            (r.form.isBefore(reservation.form) ||
-                r.form.isAtSameMomentAs(reservation.form)) &&
-            (r.to.isAfter(reservation.to) ||
-                r.to.isAtSameMomentAs(reservation.to)))
+                (r.form.isBefore(reservation.form) ||
+                    r.form.isAtSameMomentAs(reservation.form)) &&
+                (r.to.isAfter(reservation.to) ||
+                    r.to.isAtSameMomentAs(reservation.to)) ||
+            (r.form.isAfter(reservation.form) && r.to.isBefore(reservation.to)))
         .toList();
 
     return Future.value(invalidReservation.length <= 0);
