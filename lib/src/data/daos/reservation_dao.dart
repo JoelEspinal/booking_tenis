@@ -79,4 +79,8 @@ class ReservationDao extends DatabaseAccessor<AppDatabase>
           ]))
         .watch();
   }
+
+  Future deleteById(int id) {
+    return (delete(reservation)..where((r) => r.id.equals(id))).go();
+  }
 }
