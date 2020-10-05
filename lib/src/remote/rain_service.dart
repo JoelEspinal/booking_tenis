@@ -24,7 +24,7 @@ class RainService with ChangeNotifier {
           _rainPercent = 0;
         }
 
-        _rainPercent = (rainData * 100);
+        _rainPercent = rainData;
         notifyListeners();
       } catch (e) {
         print(e);

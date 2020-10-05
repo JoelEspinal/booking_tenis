@@ -32,7 +32,7 @@ class WheatherWidget extends StatelessWidget {
                         ),
                       ),
                       trailing: Text(
-                        '${provabilites.rainPercent.toStringAsPrecision(2)} %',
+                        '${provabilites.rainPercent.toStringAsFixed(2)} %',
                         style: TextStyle(fontSize: 24),
                       ),
                     ));
