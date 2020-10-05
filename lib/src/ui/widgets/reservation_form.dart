@@ -1,3 +1,4 @@
+import 'package:booking_tenis/src/common/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,17 +24,19 @@ class ReservationForm extends StatelessWidget {
             icon: Icon(Icons.check),
             onPressed: () async {
               var _result = await _addReservation(dao);
-
-              Fluttertoast.showToast(
-                  msg: (_result > -1)
-                      ? 'Reservada agregada'
-                      : 'Conflicto al reservar',
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.blue,
-                  textColor: (_result > -1) ? Colors.white : Colors.red[600],
-                  fontSize: 16.0);
+              if (_result != 0) {
+                Fluttertoast.showToast(
+                    msg: (_result > -1)
+                        ? 'Reservada agregada'
+                        : 'Conflicto al reservar',
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor:
+                        (_result > -1) ? Colors.blue : Colors.red[600],
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              }
             },
           ),
         ],
@@ -78,7 +81,7 @@ class ReservationForm extends StatelessWidget {
                 initialValue: DateTime.now(),
                 initialDate: DateTime.now(),
                 firstDate: DateTime.now(),
-                format: DateFormat('dd/MM/yyyy hh:mm'),
+                format: DateFormat(Constants.DATE_TIME_FORMAT),
                 decoration: InputDecoration(labelText: 'Desde'),
                 validators: [
                   FormBuilderValidators.required(),
@@ -90,7 +93,7 @@ class ReservationForm extends StatelessWidget {
                 initialValue: DateTime.now(),
                 initialDate: DateTime.now(),
                 firstDate: DateTime.now(),
-                format: DateFormat('dd/MM/yyyy hh:mm'),
+                format: DateFormat(Constants.DATE_TIME_FORMAT),
                 decoration: InputDecoration(labelText: 'Hasta'),
                 validators: [
                   FormBuilderValidators.required(),
@@ -105,14 +108,36 @@ class ReservationForm extends StatelessWidget {
 
   Future<int> _addReservation(dao) async {
     if (_fbKey.currentState.validate()) {
-      var _owner = _fbKey.currentState.fields['name'].currentState.value;
-      var _court = _fbKey.currentState.fields['court'].currentState.value;
-      var _from = _fbKey.currentState.fields['from'].currentState.value;
-      var _to = _fbKey.currentState.fields['to'].currentState.value;
+      String _owner = _fbKey.currentState.fields['name'].currentState.value;
+      String _court = _fbKey.currentState.fields['court'].currentState.value;
+      DateTime _from = _fbKey.currentState.fields['from'].currentState.value;
+      DateTime _to = _fbKey.currentState.fields['to'].currentState.value;
+
+      var message = '';
+      if (_from.isAfter(_to)) {
+        message = 'Selecciones fechas validas';
+      } else if (_from.isAtSameMomentAs(_to)) {
+        message = 'Fechas identicas';
+      } else if (_from.isBefore(DateTime.now())) {
+        message = 'Seleccione fechas futuras';
+      }
+
+      if (message.isNotEmpty) {
+        Fluttertoast.showToast(
+            msg: message,
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red[300],
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return Future.value(0);
+      }
 
       return await dao.addReservation(
           court: _court, reservationOwner: _owner, form: _from, to: _to);
     }
+
     return 0;
   }
 }
