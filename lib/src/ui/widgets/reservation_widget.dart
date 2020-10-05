@@ -39,21 +39,46 @@ class ReservationWidget extends StatelessWidget {
             )
           ],
         ),
-        trailing: CircleAvatar(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          child: Text(
-            '73 %',
-            style: TextStyle(fontSize: 18),
-          ),
+        trailing: IconButton(
+          icon: Icon(Icons.delete_forever),
+          onPressed: () {
+            _showAlertDialog(context);
+          },
         ),
         leading: CircleAvatar(
-
           child: Text(
             reservation.court,
             style: TextStyle(fontSize: 32),
           ),
         ),
       ),
+    );
+  }
+
+  _showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Eliminar reserva'),
+          content: Text('¿Desea eliminar la reserva?'),
+          actions: [
+            FlatButton(
+              child: Text("No"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text("Eliminar"),
+              onPressed: () async {
+                await dao.deleteById(reservation.id);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -17,7 +17,11 @@ class ReservationForm extends StatelessWidget {
         title: Text('RESERVAR'),
         leading: IconButton(
           icon: Icon(Icons.close),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Future.delayed(Duration.zero, () {
+              Navigator.of(context).pop();
+            });
+          },
         ),
         actions: [
           IconButton(

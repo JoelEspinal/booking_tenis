@@ -1,5 +1,5 @@
 class Constants {
-  Constants._(){}
+  Constants._();
   static const DATE_TIME_FORMAT = 'dd/MM/yyyy hh:mm aa';
 
 }
